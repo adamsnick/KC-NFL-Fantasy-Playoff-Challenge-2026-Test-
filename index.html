@@ -170,7 +170,6 @@ const FantasyPlayoffPool = () => {
   const [submittedRoster, setSubmittedRoster] = useState(null);
   const [participantEmail, setParticipantEmail] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
-  const [additionalNotes, setAdditionalNotes] = useState('');
 
   const getTeamFromPlayer = (playerName) => {
     for (const [teamCode, teamData] of Object.entries(playoffTeams)) {
@@ -256,11 +255,6 @@ const FantasyPlayoffPool = () => {
       emailBody += '\n';
     });
     
-    if (rosterData.additionalNotes && rosterData.additionalNotes.trim()) {
-      emailBody += `ADDITIONAL NOTES:\n`;
-      emailBody += `${rosterData.additionalNotes}\n\n`;
-    }
-    
     emailBody += '='.repeat(50) + '\n';
     emailBody += 'Good luck!\n';
     
@@ -279,7 +273,7 @@ const FantasyPlayoffPool = () => {
       return;
     }
 
-    const submissionData = { ...roster, participantEmail, additionalNotes };
+    const submissionData = { ...roster, participantEmail };
     setSubmittedRoster(submissionData);
     setSubmitted(true);
 
@@ -312,7 +306,6 @@ const FantasyPlayoffPool = () => {
     setRoster({});
     setParticipantEmail('');
     setSendingEmail(false);
-    setAdditionalNotes('');
   };
 
   if (submitted && submittedRoster) {
@@ -386,24 +379,6 @@ const FantasyPlayoffPool = () => {
             <li>• All players start each week and accrue points</li>
             <li>• Tiebreaker: Total points in Super Bowl, then conference championships</li>
           </ul>
-          
-          <div className="mt-4 pt-4" style={{ borderTop: '1px solid #8FA5B8' }}>
-            <p className="text-sm font-semibold mb-2" style={{ color: '#2D3E4D' }}>If you want a player who isn't listed:</p>
-            <ol className="text-sm space-y-1 ml-4" style={{ color: '#445D73' }}>
-              <li>1. Select a teammate at the same position from the list.</li>
-              <li>2. Write the unlisted player's name at the end of your submission.</li>
-            </ol>
-            <p className="text-sm mt-2 italic" style={{ color: '#445D73' }}>
-              <strong>Example:</strong> To select David Montgomery, choose Jahmyr Gibbs from the RB question and write in "David Montgomery" at the end of the form.
-            </p>
-          </div>
-          
-          <div className="mt-4 p-3 rounded" style={{ backgroundColor: '#FEF3D1' }}>
-            <p className="text-sm font-semibold" style={{ color: '#7E6A27' }}>⚠️ The Nando Disclaimer:</p>
-            <p className="text-sm mt-1" style={{ color: '#BD9F3A' }}>
-              Failure to complete the form correctly and/or in a timely manner may result in one or more of your player selections being voided, or replaced with Leonard Fournette, at the discretion of the commish. Please request a gentle confirmation if you have concerns about an invalid entry.
-            </p>
-          </div>
         </div>
 
         <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: '#F5F5F5' }}>
@@ -478,24 +453,6 @@ const FantasyPlayoffPool = () => {
           />
           <p className="text-sm mt-2" style={{ color: '#503591' }}>
             Enter your email to receive a copy of your roster submission
-          </p>
-        </div>
-
-        <div className="mb-8 rounded-lg p-4" style={{ backgroundColor: '#F5F5F5', borderColor: '#CCCCCC', borderWidth: '1px' }}>
-          <h2 className="text-xl font-bold mb-4" style={{ color: '#333333' }}>Additional Notes (Optional)</h2>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#333333' }}>
-            Player Substitutions or Special Requests
-          </label>
-          <textarea
-            value={additionalNotes}
-            onChange={(e) => setAdditionalNotes(e.target.value)}
-            placeholder='Example: "Replace Jahmyr Gibbs with David Montgomery"'
-            rows="4"
-            className="w-full p-3 border rounded-lg"
-            style={{ borderColor: '#CCCCCC', resize: 'vertical' }}
-          />
-          <p className="text-sm mt-2" style={{ color: '#8B95A5' }}>
-            Use this field to request unlisted players or note any substitutions
           </p>
         </div>
 
