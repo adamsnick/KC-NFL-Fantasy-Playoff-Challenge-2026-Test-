@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fantasy Football Playoff Pool</title>
+    <title>KC's Fantasy Football Playoff Pool</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400&display=swap" rel="stylesheet">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -25,7 +25,6 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Lucide icons as inline SVG components
         const AlertCircle = ({ className, style }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
                 <circle cx="12" cy="12" r="10"></circle>
@@ -50,130 +49,130 @@
 
         const FantasyPlayoffPool = () => {
           const playoffTeams = {
-            'KC': { name: 'Kansas City Chiefs', players: {
-              QB: ['Patrick Mahomes'],
-              RB: ['Isiah Pacheco', 'Clyde Edwards-Helaire'],
-              WR: ['Rashee Rice', 'Justin Watson', 'Mecole Hardman'],
-              TE: ['Travis Kelce', 'Noah Gray'],
-              K: ['Harrison Butker'],
-              DEF: ['Chris Jones', 'L\'Jarius Sneed'],
-              DST: ['Chiefs Defense']
+            'DEN': { name: 'Broncos', players: {
+              QB: ['Bo Nix'],
+              RB: ['RJ Harvey'],
+              WR: ['Courtland Sutton'],
+              TE: ['Evan Engram'],
+              K: ['Wil Lutz'],
+              DEF: ['Alex Singleton', 'Nik Bonitto', 'Pat Surtain', 'Talanoa Hufanga'],
+              DST: ['Broncos Defense']
             }},
-            'BUF': { name: 'Buffalo Bills', players: {
-              QB: ['Josh Allen'],
-              RB: ['James Cook', 'Ty Johnson'],
-              WR: ['Stefon Diggs', 'Gabe Davis', 'Khalil Shakir'],
-              TE: ['Dalton Kincaid', 'Dawson Knox'],
-              K: ['Tyler Bass'],
-              DEF: ['Von Miller', 'Matt Milano'],
-              DST: ['Bills Defense']
+            'NE': { name: 'Patriots', players: {
+              QB: ['Drake Maye'],
+              RB: ['TreVeyon Henderson'],
+              WR: ['Stefon Diggs'],
+              TE: ['Hunter Henry'],
+              K: ['Andy Borregales'],
+              DEF: ['Christian Gonzalez', 'Jaylinn Hawkins', 'Marcus Jones', 'Robert Spillane'],
+              DST: ['Patriots Defense']
             }},
-            'BAL': { name: 'Baltimore Ravens', players: {
-              QB: ['Lamar Jackson'],
-              RB: ['Gus Edwards', 'Justice Hill'],
-              WR: ['Zay Flowers', 'Rashod Bateman', 'Nelson Agholor'],
-              TE: ['Mark Andrews', 'Isaiah Likely'],
-              K: ['Justin Tucker'],
-              DEF: ['Roquan Smith', 'Kyle Hamilton'],
-              DST: ['Ravens Defense']
+            'JAC': { name: 'Jaguars', players: {
+              QB: ['Trevor Lawrence'],
+              RB: ['Travis Etienne'],
+              WR: ['Brian Thomas', 'Jakobi Meyers'],
+              TE: ['Brenton Strange'],
+              K: ['Cam Little'],
+              DEF: ['Devin Lloyd', 'Foyesade Oluokun', 'Josh Hines-Allen'],
+              DST: ['Jaguars Defense']
             }},
-            'HOU': { name: 'Houston Texans', players: {
-              QB: ['C.J. Stroud'],
-              RB: ['Devin Singletary', 'Dare Ogunbowale'],
-              WR: ['Nico Collins', 'Tank Dell', 'Robert Woods'],
-              TE: ['Dalton Schultz', 'Brevin Jordan'],
-              K: ['Ka\'imi Fairbairn'],
+            'PIT': { name: 'Steelers', players: {
+              QB: ['Aaron Rodgers'],
+              RB: ['Jaylen Warren', 'Kenneth Gainwell'],
+              WR: ['DK Metcalf'],
+              TE: ['Jonnu Smith', 'Pat Freiermuth'],
+              K: ['Chris Boswell],
               DEF: ['Will Anderson Jr.', 'Danielle Hunter'],
               DST: ['Texans Defense']
             }},
-            'PIT': { name: 'Pittsburgh Steelers', players: {
-              QB: ['Russell Wilson', 'Justin Fields'],
-              RB: ['Najee Harris', 'Jaylen Warren'],
-              WR: ['George Pickens', 'Calvin Austin III', 'Van Jefferson'],
-              TE: ['Pat Freiermuth', 'Darnell Washington'],
-              K: ['Chris Boswell'],
-              DEF: ['T.J. Watt', 'Minkah Fitzpatrick'],
-              DST: ['Steelers Defense']
+            'BUF': { name: 'Bills', players: {
+              QB: ['Josh Allen'],
+              RB: ['James Cook'],
+              WR: ['Khalil Shakir'],
+              TE: ['Dalton Kincaid'],
+              K: ['Matt Prater'],
+              DEF: ['Ed Oliver', 'Terrel Bernard'],
+              DST: ['Bills Defense']
             }},
             'LAC': { name: 'LA Chargers', players: {
               QB: ['Justin Herbert'],
-              RB: ['Gus Edwards', 'Hassan Haskins'],
-              WR: ['Ladd McConkey', 'Joshua Palmer', 'Quentin Johnston'],
-              TE: ['Will Dissly', 'Stone Smartt'],
+              RB: ['Omarion Hampton'],
+              WR: ['Ladd McConkey'],
+              TE: ['Oronde Gadsden'],
               K: ['Cameron Dicker'],
-              DEF: ['Khalil Mack', 'Derwin James'],
+              DEF: ['Daiyan Henley', 'Derwin James', 'Tuli Tuipulotu'],
               DST: ['Chargers Defense']
             }},
-            'DEN': { name: 'Denver Broncos', players: {
-              QB: ['Bo Nix'],
-              RB: ['Javonte Williams', 'Jaleel McLaughlin'],
-              WR: ['Courtland Sutton', 'Marvin Mims Jr.', 'Devaughn Vele'],
-              TE: ['Adam Trautman', 'Lucas Krull'],
-              K: ['Wil Lutz'],
-              DEF: ['Patrick Surtain II', 'Zach Allen'],
-              DST: ['Broncos Defense']
+            'HOU': { name: 'Texans', players: {
+              QB: ['CJ Stroud'],
+              RB: ['Woody Marks'],
+              WR: ['Nico Collins'],
+              TE: ['Dalton Schultz'],
+              K: ["Ka'imi Fairbairn"],
+              DEF: ['Danielle Hunter', 'Kamari Lassiter', 'Will Anderson'],
+              DST: ['Texans Defense']
             }},
-            'PHI': { name: 'Philadelphia Eagles', players: {
+            'SEA': { name: 'Seahawks', players: {
+              QB: ['Sam Darnold'],
+              RB: ['Kenneth Walker'],
+              WR: ['Jaxon Smith-Njigba'],
+              TE: ['AJ Barner'],
+              K: ['Jason Myers'],
+              DEF: ['Ernest Jones', 'Nick Emmanwori'],
+              DST: ['Seahawks Defense']
+            }},
+            'CHI': { name: 'Bears', players: {
+              QB: ['Caleb Williams'],
+              RB: ["D'Andre Swift", 'Kyle Monangai'],
+              WR: ['Rome Odunze'],
+              TE: ['Colston Loveland'],
+              K: ['Cairo Santos'],
+              DEF: ['Kevin Byard', 'Nahshon Wright', 'Tremaine Edmunds'],
+              DST: ['Bears Defense']
+            }},
+            'PHI': { name: 'Eagles', players: {
               QB: ['Jalen Hurts'],
-              RB: ['Saquon Barkley', 'Kenneth Gainwell'],
-              WR: ['A.J. Brown', 'DeVonta Smith', 'Jahan Dotson'],
-              TE: ['Dallas Goedert', 'Grant Calcaterra'],
+              RB: ['Saquon Barkley'],
+              WR: ['AJ Brown', 'DeVonta Smith'],
+              TE: ['Dallas Goedert'],
               K: ['Jake Elliott'],
-              DEF: ['Jalen Carter', 'Zack Baun'],
+              DEF: ['Cooper DeJean', 'Jalen Carter', 'Nakobe Dean', 'Zack Baun'],
               DST: ['Eagles Defense']
             }},
-            'DET': { name: 'Detroit Lions', players: {
-              QB: ['Jared Goff'],
-              RB: ['Jahmyr Gibbs', 'David Montgomery'],
-              WR: ['Amon-Ra St. Brown', 'Jameson Williams', 'Kalif Raymond'],
-              TE: ['Sam LaPorta', 'Brock Wright'],
-              K: ['Jake Bates'],
-              DEF: ['Aidan Hutchinson', 'Brian Branch'],
-              DST: ['Lions Defense']
-            }},
-            'TB': { name: 'Tampa Bay Buccaneers', players: {
+            'TB': { name: 'Buccaneers', players: {
               QB: ['Baker Mayfield'],
-              RB: ['Bucky Irving', 'Rachaad White'],
-              WR: ['Mike Evans', 'Jalen McMillan', 'Sterling Shepard'],
-              TE: ['Cade Otton', 'Payne Durham'],
+              RB: ['Bucky Irving'],
+              WR: ['Mike Evans'],
+              TE: ['Cade Otton'],
               K: ['Chase McLaughlin'],
-              DEF: ['Lavonte David', 'Antoine Winfield Jr.'],
+              DEF: ['Antoine Winfield', 'Lavonte David', 'SirVocea Dennis', 'Tykee Smith'],
               DST: ['Buccaneers Defense']
             }},
-            'WAS': { name: 'Washington Commanders', players: {
-              QB: ['Jayden Daniels'],
-              RB: ['Brian Robinson Jr.', 'Austin Ekeler'],
-              WR: ['Terry McLaurin', 'Dyami Brown', 'Olamide Zaccheaus'],
-              TE: ['Zach Ertz', 'Ben Sinnott'],
-              K: ['Zane Gonzalez'],
-              DEF: ['Bobby Wagner', 'Frankie Luvu'],
-              DST: ['Commanders Defense']
-            }},
-            'LAR': { name: 'LA Rams', players: {
+            'LAR': { name: 'Rams', players: {
               QB: ['Matthew Stafford'],
-              RB: ['Kyren Williams', 'Blake Corum'],
-              WR: ['Puka Nacua', 'Cooper Kupp', 'Demarcus Robinson'],
-              TE: ['Tyler Higbee', 'Colby Parkinson'],
-              K: ['Joshua Karty'],
-              DEF: ['Jared Verse', 'Kobie Turner'],
+              RB: ['Kyren Williams'],
+              WR: ['Puka Nacua'],
+              TE: ['Colby Parkinson', 'Tyler Higbee'],
+              K: ['Harrison Mevis'],
+              DEF: ['Byron Young', 'Kam Curl', 'Nate Landman'],
               DST: ['Rams Defense']
             }},
-            'MIN': { name: 'Minnesota Vikings', players: {
-              QB: ['Sam Darnold'],
-              RB: ['Aaron Jones', 'Ty Chandler'],
-              WR: ['Justin Jefferson', 'Jordan Addison', 'Jalen Nailor'],
-              TE: ['T.J. Hockenson', 'Josh Oliver'],
-              K: ['Will Reichard'],
-              DEF: ['Jonathan Greenard', 'Harrison Smith'],
-              DST: ['Vikings Defense']
+            'SF': { name: '49ers', players: {
+              QB: ['Brock Purdy'],
+              RB: ['Christian McCaffrey'],
+              WR: ['Jauan Jennings'],
+              TE: ['George Kittle'],
+              K: ['Eddy Pineiro'],
+              DEF: ['Dee Winters', 'Malik Mustapha'],
+              DST: ['49ers Defense']
             }},
-            'GB': { name: 'Green Bay Packers', players: {
+            'GB': { name: 'Packers', players: {
               QB: ['Jordan Love'],
-              RB: ['Josh Jacobs', 'Emanuel Wilson'],
-              WR: ['Jayden Reed', 'Romeo Doubs', 'Dontayvion Wicks'],
-              TE: ['Tucker Kraft', 'Luke Musgrave'],
+              RB: ['Josh Jacobs'],
+              WR: ['Christian Watson', 'Jayden Reed'],
+              TE: ['Luke Musgrave'],
               K: ['Brandon McManus'],
-              DEF: ['Rashan Gary', 'Xavier McKinney'],
+              DEF: ['Edgerrin Cooper', 'Evan Williams', 'Quay Walker'],
               DST: ['Packers Defense']
             }}
           };
@@ -192,7 +191,6 @@
           const [roster, setRoster] = useState({});
           const [submitted, setSubmitted] = useState(false);
           const [submittedRoster, setSubmittedRoster] = useState(null);
-          const [participantEmail, setParticipantEmail] = useState('');
           const [participantName, setParticipantName] = useState('');
           const [sendingEmail, setSendingEmail] = useState(false);
           const [additionalNotes, setAdditionalNotes] = useState('');
@@ -280,25 +278,24 @@
 
             setSendingEmail(true);
 
-            // Format the submission data
             let formattedRoster = '';
             if (participantName.trim()) {
-              formattedRoster += `PARTICIPANT: ${participantName}\n\n`;
+              formattedRoster += 'PARTICIPANT: ' + participantName + '\n\n';
             }
             
             positions.forEach(pos => {
-              formattedRoster += `${pos.name}${pos.count > 1 ? 's' : ''}:\n`;
+              formattedRoster += pos.name + (pos.count > 1 ? 's' : '') + ':\n';
               Array.from({ length: pos.count }, (_, i) => {
-                const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                const slot = pos.key + (pos.count > 1 ? i + 1 : '');
                 const player = roster[slot];
                 const team = getTeamFromPlayer(player);
-                formattedRoster += `  • ${player} (${playoffTeams[team]?.name})\n`;
+                formattedRoster += '  • ' + player + ' (' + playoffTeams[team]?.name + ')\n';
               });
               formattedRoster += '\n';
             });
             
             if (additionalNotes.trim()) {
-              formattedRoster += `ADDITIONAL NOTES:\n${additionalNotes}\n\n`;
+              formattedRoster += 'ADDITIONAL NOTES:\n' + additionalNotes + '\n\n';
             }
 
             try {
@@ -309,14 +306,13 @@
                 },
                 body: JSON.stringify({
                   participantName: participantName || 'Anonymous',
-                  participantEmail: participantEmail || 'Not provided',
                   roster: formattedRoster,
-                  _subject: `Fantasy Playoff Pool Submission - ${participantName || 'Anonymous'}`
+                  _subject: 'Fantasy Playoff Pool Submission - ' + (participantName || 'Anonymous')
                 })
               });
 
               if (response.ok) {
-                const submissionData = { ...roster, participantEmail, participantName, additionalNotes };
+                const submissionData = { ...roster, participantName, additionalNotes };
                 setSubmittedRoster(submissionData);
                 setSubmitted(true);
               } else {
@@ -334,7 +330,6 @@
             setSubmitted(false);
             setSubmittedRoster(null);
             setRoster({});
-            setParticipantEmail('');
             setParticipantName('');
             setSendingEmail(false);
             setAdditionalNotes('');
@@ -367,7 +362,7 @@
                         <h3 style={{ fontWeight: '600', marginBottom: '8px', color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>{pos.name}s:</h3>
                         <div style={{ marginLeft: '16px' }}>
                           {Array.from({ length: pos.count }, (_, i) => {
-                            const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                            const slot = pos.key + (pos.count > 1 ? i + 1 : '');
                             const player = submittedRoster[slot];
                             const team = getTeamFromPlayer(player);
                             return (
@@ -423,7 +418,7 @@
                   <ul style={{ fontSize: '14px', marginLeft: '16px', color: '#445D73' }}>
                     <li style={{ marginBottom: '4px' }}>Select 1 player from each of the 14 playoff teams</li>
                     <li style={{ marginBottom: '4px' }}>All players start each week and accrue points</li>
-                    <li style={{ marginBottom: '4px' }}>Tiebreaker: Total points in Super Bowl, then conference championships</li>
+                    <li style={{ marginBottom: '4px' }}>Tiebreaker: Total points in Super Bowl, then conference championships, etc.</li>
                   </ul>
                   
                   <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #8FA5B8' }}>
@@ -440,7 +435,7 @@
                   <div style={{ marginTop: '16px', padding: '12px', borderRadius: '4px', backgroundColor: '#FEF3D1' }}>
                     <p style={{ fontSize: '14px', fontWeight: '600', color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>⚠️ The Nando Disclaimer:</p>
                     <p style={{ fontSize: '14px', marginTop: '4px', color: '#BD9F3A' }}>
-                      Failure to complete the form correctly and/or in a timely manner may result in one or more of your player selections being voided, or replaced with Leonard Fournette, at the discretion of the commish. Please request a gentle confirmation if you have concerns about an invalid entry.
+                      Failure to complete the form correctly and/or in a timely manner may result in one or more of your player selections being voided, or replaced with Leonard Fournette, at the discretion of the commish. Please request a confirmation if you have concerns about an invalid entry.
                     </p>
                   </div>
                 </div>
@@ -481,7 +476,7 @@
                     </h2>
                     
                     {Array.from({ length: pos.count }, (_, i) => {
-                      const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                      const slot = pos.key + (pos.count > 1 ? i + 1 : '');
                       const availablePlayers = getAvailablePlayers(pos.type, slot);
                       const selectedPlayer = roster[slot];
                       const selectedTeam = selectedPlayer ? getTeamFromPlayer(selectedPlayer) : null;
@@ -489,7 +484,7 @@
                       return (
                         <div key={slot} style={{ marginBottom: '16px' }}>
                           <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-                            {pos.name} {pos.count > 1 ? `#${i + 1}` : ''}
+                            {pos.name} {pos.count > 1 ? '#' + (i + 1) : ''}
                           </label>
                           <select
                             value={selectedPlayer || ''}
@@ -514,90 +509,73 @@
                   </div>
                 ))}
 
-                <div style={{ marginBottom: '32px', borderRadius: '8px', padding: '16px', backgroundColor: '#DED1F2', borderColor: '#6B46C1', borderWidth: '1px', borderStyle: 'solid' }
-                  }>
-<h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Email Confirmation (Optional)</h2>
-<label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-Your Email Address
-</label>
-<input
-type="email"
-value={participantEmail}
-onChange={(e) => setParticipantEmail(e.target.value)}
-placeholder="your.email@example.com (optional)"
-style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px' }}
-/>
-<p style={{ fontSize: '14px', marginTop: '8px', color: '#503591' }}>
-Enter your email to receive a copy of your roster submission
-</p>
-</div>
-            <div style={{ marginBottom: '32px', borderRadius: '8px', padding: '16px', backgroundColor: '#F5F5F5', borderColor: '#CCCCCC', borderWidth: '1px', borderStyle: 'solid' }}>
-              <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Additional Notes (Optional)</h2>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-                Player Substitutions or Special Requests
-              </label>
-              <textarea
-                value={additionalNotes}
-                onChange={(e) => setAdditionalNotes(e.target.value)}
-                placeholder='Example: "Replace Jahmyr Gibbs with David Montgomery"'
-                rows="4"
-                style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px', resize: 'vertical' }}
-              />
-              <p style={{ fontSize: '14px', marginTop: '8px', color: '#8B95A5' }}>
-                Use this field to request unlisted players or note any substitutions
-              </p>
-            </div>
-
-            {usedTeams.size !== 14 && usedTeams.size > 0 && (
-              <div style={{ marginBottom: '16px', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#FEF3D1', borderColor: '#FCD34D', borderWidth: '1px', borderStyle: 'solid' }}>
-                <AlertCircle style={{ width: '20px', height: '20px', flexShrink: 0, marginTop: '2px', color: '#7E6A27' }} />
-                <div>
-                  <p style={{ fontWeight: '600', color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>Warning: Team Requirement Not Met</p>
-                  <p style={{ fontSize: '14px', color: '#BD9F3A' }}>
-                    You must select exactly one player from each of the 14 playoff teams. 
-                    Currently using {usedTeams.size} teams.
+                <div style={{ marginBottom: '32px', borderRadius: '8px', padding: '16px', backgroundColor: '#F5F5F5', borderColor: '#CCCCCC', borderWidth: '1px', borderStyle: 'solid' }}>
+                  <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Additional Notes (Optional)</h2>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                    Player Substitutions or Special Requests
+                  </label>
+                  <textarea
+                    value={additionalNotes}
+                    onChange={(e) => setAdditionalNotes(e.target.value)}
+                    placeholder='Example: "Replace Jahmyr Gibbs with David Montgomery"'
+                    rows="4"
+                    style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px', resize: 'vertical' }}
+                  />
+                  <p style={{ fontSize: '14px', marginTop: '8px', color: '#8B95A5' }}>
+                    Use this field to request unlisted players or note any substitutions
                   </p>
                 </div>
+
+                {usedTeams.size !== 14 && usedTeams.size > 0 && (
+                  <div style={{ marginBottom: '16px', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#FEF3D1', borderColor: '#FCD34D', borderWidth: '1px', borderStyle: 'solid' }}>
+                    <AlertCircle style={{ width: '20px', height: '20px', flexShrink: 0, marginTop: '2px', color: '#7E6A27' }} />
+                    <div>
+                      <p style={{ fontWeight: '600', color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>Warning: Team Requirement Not Met</p>
+                      <p style={{ fontSize: '14px', color: '#BD9F3A' }}>
+                        You must select exactly one player from each of the 14 playoff teams. 
+                        Currently using {usedTeams.size} teams.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={!isFormComplete() || sendingEmail}
+                  style={{ 
+                    width: '100%', 
+                    padding: '16px', 
+                    borderRadius: '8px', 
+                    fontWeight: 'bold', 
+                    fontSize: '18px', 
+                    transition: 'background-color 0.2s', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '8px',
+                    backgroundColor: isFormComplete() && !sendingEmail ? '#CC5500' : '#CCCCCC',
+                    color: isFormComplete() && !sendingEmail ? '#FFFFFF' : '#8B95A5',
+                    border: 'none',
+                    cursor: isFormComplete() && !sendingEmail ? 'pointer' : 'not-allowed',
+                    fontFamily: 'Poppins, sans-serif'
+                  }}
+                  onMouseOver={(e) => {
+                    if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#993F00';
+                  }}
+                  onMouseOut={(e) => {
+                    if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#CC5500';
+                  }}
+                >
+                  <Send style={{ width: '20px', height: '20px' }} />
+                  {sendingEmail ? 'Submitting...' : 'Submit Roster'}
+                </button>
               </div>
-            )}
+            </div>
+          );
+        };
 
-            <button
-              onClick={handleSubmit}
-              disabled={!isFormComplete() || sendingEmail}
-              style={{ 
-                width: '100%', 
-                padding: '16px', 
-                borderRadius: '8px', 
-                fontWeight: 'bold', 
-                fontSize: '18px', 
-                transition: 'background-color 0.2s', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                gap: '8px',
-                backgroundColor: isFormComplete() && !sendingEmail ? '#CC5500' : '#CCCCCC',
-                color: isFormComplete() && !sendingEmail ? '#FFFFFF' : '#8B95A5',
-                border: 'none',
-                cursor: isFormComplete() && !sendingEmail ? 'pointer' : 'not-allowed',
-                fontFamily: 'Poppins, sans-serif'
-              }}
-              onMouseOver={(e) => {
-                if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#993F00';
-              }}
-              onMouseOut={(e) => {
-                if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#CC5500';
-              }}
-            >
-              <Send style={{ width: '20px', height: '20px' }} />
-              {sendingEmail ? 'Submitting...' : 'Submit Roster'}
-            </button>
-          </div>
-        </div>
-      );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<FantasyPlayoffPool />);
-</script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<FantasyPlayoffPool />);
+    </script>
 </body>
 </html>
