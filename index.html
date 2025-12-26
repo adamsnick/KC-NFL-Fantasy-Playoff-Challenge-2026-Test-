@@ -1,579 +1,603 @@
-import React, { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, Send } from 'lucide-react';
-
-const FantasyPlayoffPool = () => {
-  // Load Google Fonts
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400&display=swap';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-  }, []);
-  // Sample playoff teams and players (you'll need to update these with actual 2024-25 playoff teams)
-  const playoffTeams = {
-    'KC': { name: 'Kansas City Chiefs', players: {
-      QB: ['Patrick Mahomes'],
-      RB: ['Isiah Pacheco', 'Clyde Edwards-Helaire'],
-      WR: ['Rashee Rice', 'Justin Watson', 'Mecole Hardman'],
-      TE: ['Travis Kelce', 'Noah Gray'],
-      K: ['Harrison Butker'],
-      DEF: ['Chris Jones', 'L\'Jarius Sneed'],
-      DST: ['Chiefs Defense']
-    }},
-    'BUF': { name: 'Buffalo Bills', players: {
-      QB: ['Josh Allen'],
-      RB: ['James Cook', 'Ty Johnson'],
-      WR: ['Stefon Diggs', 'Gabe Davis', 'Khalil Shakir'],
-      TE: ['Dalton Kincaid', 'Dawson Knox'],
-      K: ['Tyler Bass'],
-      DEF: ['Von Miller', 'Matt Milano'],
-      DST: ['Bills Defense']
-    }},
-    'BAL': { name: 'Baltimore Ravens', players: {
-      QB: ['Lamar Jackson'],
-      RB: ['Gus Edwards', 'Justice Hill'],
-      WR: ['Zay Flowers', 'Rashod Bateman', 'Nelson Agholor'],
-      TE: ['Mark Andrews', 'Isaiah Likely'],
-      K: ['Justin Tucker'],
-      DEF: ['Roquan Smith', 'Kyle Hamilton'],
-      DST: ['Ravens Defense']
-    }},
-    'HOU': { name: 'Houston Texans', players: {
-      QB: ['C.J. Stroud'],
-      RB: ['Devin Singletary', 'Dare Ogunbowale'],
-      WR: ['Nico Collins', 'Tank Dell', 'Robert Woods'],
-      TE: ['Dalton Schultz', 'Brevin Jordan'],
-      K: ['Ka\'imi Fairbairn'],
-      DEF: ['Will Anderson Jr.', 'Danielle Hunter'],
-      DST: ['Texans Defense']
-    }},
-    'PIT': { name: 'Pittsburgh Steelers', players: {
-      QB: ['Russell Wilson', 'Justin Fields'],
-      RB: ['Najee Harris', 'Jaylen Warren'],
-      WR: ['George Pickens', 'Calvin Austin III', 'Van Jefferson'],
-      TE: ['Pat Freiermuth', 'Darnell Washington'],
-      K: ['Chris Boswell'],
-      DEF: ['T.J. Watt', 'Minkah Fitzpatrick'],
-      DST: ['Steelers Defense']
-    }},
-    'LAC': { name: 'LA Chargers', players: {
-      QB: ['Justin Herbert'],
-      RB: ['Gus Edwards', 'Hassan Haskins'],
-      WR: ['Ladd McConkey', 'Joshua Palmer', 'Quentin Johnston'],
-      TE: ['Will Dissly', 'Stone Smartt'],
-      K: ['Cameron Dicker'],
-      DEF: ['Khalil Mack', 'Derwin James'],
-      DST: ['Chargers Defense']
-    }},
-    'DEN': { name: 'Denver Broncos', players: {
-      QB: ['Bo Nix'],
-      RB: ['Javonte Williams', 'Jaleel McLaughlin'],
-      WR: ['Courtland Sutton', 'Marvin Mims Jr.', 'Devaughn Vele'],
-      TE: ['Adam Trautman', 'Lucas Krull'],
-      K: ['Wil Lutz'],
-      DEF: ['Patrick Surtain II', 'Zach Allen'],
-      DST: ['Broncos Defense']
-    }},
-    'PHI': { name: 'Philadelphia Eagles', players: {
-      QB: ['Jalen Hurts'],
-      RB: ['Saquon Barkley', 'Kenneth Gainwell'],
-      WR: ['A.J. Brown', 'DeVonta Smith', 'Jahan Dotson'],
-      TE: ['Dallas Goedert', 'Grant Calcaterra'],
-      K: ['Jake Elliott'],
-      DEF: ['Jalen Carter', 'Zack Baun'],
-      DST: ['Eagles Defense']
-    }},
-    'DET': { name: 'Detroit Lions', players: {
-      QB: ['Jared Goff'],
-      RB: ['Jahmyr Gibbs', 'David Montgomery'],
-      WR: ['Amon-Ra St. Brown', 'Jameson Williams', 'Kalif Raymond'],
-      TE: ['Sam LaPorta', 'Brock Wright'],
-      K: ['Jake Bates'],
-      DEF: ['Aidan Hutchinson', 'Brian Branch'],
-      DST: ['Lions Defense']
-    }},
-    'TB': { name: 'Tampa Bay Buccaneers', players: {
-      QB: ['Baker Mayfield'],
-      RB: ['Bucky Irving', 'Rachaad White'],
-      WR: ['Mike Evans', 'Jalen McMillan', 'Sterling Shepard'],
-      TE: ['Cade Otton', 'Payne Durham'],
-      K: ['Chase McLaughlin'],
-      DEF: ['Lavonte David', 'Antoine Winfield Jr.'],
-      DST: ['Buccaneers Defense']
-    }},
-    'WAS': { name: 'Washington Commanders', players: {
-      QB: ['Jayden Daniels'],
-      RB: ['Brian Robinson Jr.', 'Austin Ekeler'],
-      WR: ['Terry McLaurin', 'Dyami Brown', 'Olamide Zaccheaus'],
-      TE: ['Zach Ertz', 'Ben Sinnott'],
-      K: ['Zane Gonzalez'],
-      DEF: ['Bobby Wagner', 'Frankie Luvu'],
-      DST: ['Commanders Defense']
-    }},
-    'LAR': { name: 'LA Rams', players: {
-      QB: ['Matthew Stafford'],
-      RB: ['Kyren Williams', 'Blake Corum'],
-      WR: ['Puka Nacua', 'Cooper Kupp', 'Demarcus Robinson'],
-      TE: ['Tyler Higbee', 'Colby Parkinson'],
-      K: ['Joshua Karty'],
-      DEF: ['Jared Verse', 'Kobie Turner'],
-      DST: ['Rams Defense']
-    }},
-    'MIN': { name: 'Minnesota Vikings', players: {
-      QB: ['Sam Darnold'],
-      RB: ['Aaron Jones', 'Ty Chandler'],
-      WR: ['Justin Jefferson', 'Jordan Addison', 'Jalen Nailor'],
-      TE: ['T.J. Hockenson', 'Josh Oliver'],
-      K: ['Will Reichard'],
-      DEF: ['Jonathan Greenard', 'Harrison Smith'],
-      DST: ['Vikings Defense']
-    }},
-    'GB': { name: 'Green Bay Packers', players: {
-      QB: ['Jordan Love'],
-      RB: ['Josh Jacobs', 'Emanuel Wilson'],
-      WR: ['Jayden Reed', 'Romeo Doubs', 'Dontayvion Wicks'],
-      TE: ['Tucker Kraft', 'Luke Musgrave'],
-      K: ['Brandon McManus'],
-      DEF: ['Rashan Gary', 'Xavier McKinney'],
-      DST: ['Packers Defense']
-    }}
-  };
-
-  const positions = [
-    { key: 'QB', name: 'Quarterback', count: 3, type: 'QB' },
-    { key: 'RB', name: 'Running Back', count: 3, type: 'RB' },
-    { key: 'WR', name: 'Wide Receiver', count: 3, type: 'WR' },
-    { key: 'TE', name: 'Tight End', count: 1, type: 'TE' },
-    { key: 'FLEX', name: 'Flex (RB/WR/TE)', count: 1, type: 'FLEX' },
-    { key: 'K', name: 'Kicker', count: 1, type: 'K' },
-    { key: 'DEF', name: 'Defensive Player', count: 1, type: 'DEF' },
-    { key: 'DST', name: 'Team Defense', count: 1, type: 'DST' }
-  ];
-
-  const [roster, setRoster] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [submittedRoster, setSubmittedRoster] = useState(null);
-  const [participantEmail, setParticipantEmail] = useState('');
-  const [participantName, setParticipantName] = useState('');
-  const [sendingEmail, setSendingEmail] = useState(false);
-  const [additionalNotes, setAdditionalNotes] = useState('');
-
-  const getTeamFromPlayer = (playerName) => {
-    for (const [teamCode, teamData] of Object.entries(playoffTeams)) {
-      for (const players of Object.values(teamData.players)) {
-        if (players.includes(playerName)) {
-          return teamCode;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Football Playoff Pool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400&display=swap" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-      }
-    }
-    return null;
-  };
-
-  const getUsedTeams = () => {
-    const teams = new Set();
-    Object.values(roster).forEach(player => {
-      if (player) {
-        const team = getTeamFromPlayer(player);
-        if (team) teams.add(team);
-      }
-    });
-    return teams;
-  };
-
-  const getAvailablePlayers = (positionType, currentSlot) => {
-    const usedTeams = getUsedTeams();
-    const currentPlayer = roster[currentSlot];
-    const currentTeam = currentPlayer ? getTeamFromPlayer(currentPlayer) : null;
+        * { box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
     
-    let allPlayers = [];
-    
-    if (positionType === 'FLEX') {
-      Object.entries(playoffTeams).forEach(([teamCode, teamData]) => {
-        ['RB', 'WR', 'TE'].forEach(pos => {
-          teamData.players[pos]?.forEach(player => {
-            allPlayers.push({ player, team: teamCode, teamName: teamData.name });
-          });
-        });
-      });
-    } else {
-      Object.entries(playoffTeams).forEach(([teamCode, teamData]) => {
-        teamData.players[positionType]?.forEach(player => {
-          allPlayers.push({ player, team: teamCode, teamName: teamData.name });
-        });
-      });
-    }
-    
-    return allPlayers.map(({ player, team, teamName }) => ({
-      player,
-      team,
-      teamName,
-      disabled: usedTeams.has(team) && team !== currentTeam
-    }));
-  };
+    <script type="text/babel">
+        const { useState } = React;
 
-  const handlePlayerSelect = (slot, player) => {
-    setRoster(prev => ({ ...prev, [slot]: player }));
-  };
+        // Lucide icons as inline SVG components
+        const AlertCircle = ({ className, style }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        );
 
-  const isFormComplete = () => {
-    let requiredSlots = 0;
-    positions.forEach(pos => {
-      for (let i = 1; i <= pos.count; i++) {
-        requiredSlots++;
-      }
-    });
-    
-    const filledSlots = Object.values(roster).filter(v => v).length;
-    return filledSlots === requiredSlots;
-  };
+        const CheckCircle = ({ className, style }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        );
 
-  const formatRosterEmail = (rosterData) => {
-    let emailBody = 'FANTASY FOOTBALL PLAYOFF POOL SUBMISSION\n';
-    emailBody += '='.repeat(50) + '\n\n';
-    
-    if (rosterData.participantName && rosterData.participantName.trim()) {
-      emailBody += `PARTICIPANT: ${rosterData.participantName}\n\n`;
-    }
-    
-    positions.forEach(pos => {
-      emailBody += `${pos.name}${pos.count > 1 ? 's' : ''}:\n`;
-      Array.from({ length: pos.count }, (_, i) => {
-        const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
-        const player = rosterData[slot];
-        const team = getTeamFromPlayer(player);
-        emailBody += `  • ${player} (${playoffTeams[team]?.name})\n`;
-      });
-      emailBody += '\n';
-    });
-    
-    if (rosterData.additionalNotes && rosterData.additionalNotes.trim()) {
-      emailBody += `ADDITIONAL NOTES:\n`;
-      emailBody += `${rosterData.additionalNotes}\n\n`;
-    }
-    
-    emailBody += '='.repeat(50) + '\n';
-    emailBody += 'Good luck!\n';
-    
-    return emailBody;
-  };
+        const Send = ({ className, style }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
 
-  const handleSubmit = async () => {
-    if (!isFormComplete()) {
-      alert('Please complete all roster selections!');
-      return;
-    }
+        const FantasyPlayoffPool = () => {
+          const playoffTeams = {
+            'KC': { name: 'Kansas City Chiefs', players: {
+              QB: ['Patrick Mahomes'],
+              RB: ['Isiah Pacheco', 'Clyde Edwards-Helaire'],
+              WR: ['Rashee Rice', 'Justin Watson', 'Mecole Hardman'],
+              TE: ['Travis Kelce', 'Noah Gray'],
+              K: ['Harrison Butker'],
+              DEF: ['Chris Jones', 'L\'Jarius Sneed'],
+              DST: ['Chiefs Defense']
+            }},
+            'BUF': { name: 'Buffalo Bills', players: {
+              QB: ['Josh Allen'],
+              RB: ['James Cook', 'Ty Johnson'],
+              WR: ['Stefon Diggs', 'Gabe Davis', 'Khalil Shakir'],
+              TE: ['Dalton Kincaid', 'Dawson Knox'],
+              K: ['Tyler Bass'],
+              DEF: ['Von Miller', 'Matt Milano'],
+              DST: ['Bills Defense']
+            }},
+            'BAL': { name: 'Baltimore Ravens', players: {
+              QB: ['Lamar Jackson'],
+              RB: ['Gus Edwards', 'Justice Hill'],
+              WR: ['Zay Flowers', 'Rashod Bateman', 'Nelson Agholor'],
+              TE: ['Mark Andrews', 'Isaiah Likely'],
+              K: ['Justin Tucker'],
+              DEF: ['Roquan Smith', 'Kyle Hamilton'],
+              DST: ['Ravens Defense']
+            }},
+            'HOU': { name: 'Houston Texans', players: {
+              QB: ['C.J. Stroud'],
+              RB: ['Devin Singletary', 'Dare Ogunbowale'],
+              WR: ['Nico Collins', 'Tank Dell', 'Robert Woods'],
+              TE: ['Dalton Schultz', 'Brevin Jordan'],
+              K: ['Ka\'imi Fairbairn'],
+              DEF: ['Will Anderson Jr.', 'Danielle Hunter'],
+              DST: ['Texans Defense']
+            }},
+            'PIT': { name: 'Pittsburgh Steelers', players: {
+              QB: ['Russell Wilson', 'Justin Fields'],
+              RB: ['Najee Harris', 'Jaylen Warren'],
+              WR: ['George Pickens', 'Calvin Austin III', 'Van Jefferson'],
+              TE: ['Pat Freiermuth', 'Darnell Washington'],
+              K: ['Chris Boswell'],
+              DEF: ['T.J. Watt', 'Minkah Fitzpatrick'],
+              DST: ['Steelers Defense']
+            }},
+            'LAC': { name: 'LA Chargers', players: {
+              QB: ['Justin Herbert'],
+              RB: ['Gus Edwards', 'Hassan Haskins'],
+              WR: ['Ladd McConkey', 'Joshua Palmer', 'Quentin Johnston'],
+              TE: ['Will Dissly', 'Stone Smartt'],
+              K: ['Cameron Dicker'],
+              DEF: ['Khalil Mack', 'Derwin James'],
+              DST: ['Chargers Defense']
+            }},
+            'DEN': { name: 'Denver Broncos', players: {
+              QB: ['Bo Nix'],
+              RB: ['Javonte Williams', 'Jaleel McLaughlin'],
+              WR: ['Courtland Sutton', 'Marvin Mims Jr.', 'Devaughn Vele'],
+              TE: ['Adam Trautman', 'Lucas Krull'],
+              K: ['Wil Lutz'],
+              DEF: ['Patrick Surtain II', 'Zach Allen'],
+              DST: ['Broncos Defense']
+            }},
+            'PHI': { name: 'Philadelphia Eagles', players: {
+              QB: ['Jalen Hurts'],
+              RB: ['Saquon Barkley', 'Kenneth Gainwell'],
+              WR: ['A.J. Brown', 'DeVonta Smith', 'Jahan Dotson'],
+              TE: ['Dallas Goedert', 'Grant Calcaterra'],
+              K: ['Jake Elliott'],
+              DEF: ['Jalen Carter', 'Zack Baun'],
+              DST: ['Eagles Defense']
+            }},
+            'DET': { name: 'Detroit Lions', players: {
+              QB: ['Jared Goff'],
+              RB: ['Jahmyr Gibbs', 'David Montgomery'],
+              WR: ['Amon-Ra St. Brown', 'Jameson Williams', 'Kalif Raymond'],
+              TE: ['Sam LaPorta', 'Brock Wright'],
+              K: ['Jake Bates'],
+              DEF: ['Aidan Hutchinson', 'Brian Branch'],
+              DST: ['Lions Defense']
+            }},
+            'TB': { name: 'Tampa Bay Buccaneers', players: {
+              QB: ['Baker Mayfield'],
+              RB: ['Bucky Irving', 'Rachaad White'],
+              WR: ['Mike Evans', 'Jalen McMillan', 'Sterling Shepard'],
+              TE: ['Cade Otton', 'Payne Durham'],
+              K: ['Chase McLaughlin'],
+              DEF: ['Lavonte David', 'Antoine Winfield Jr.'],
+              DST: ['Buccaneers Defense']
+            }},
+            'WAS': { name: 'Washington Commanders', players: {
+              QB: ['Jayden Daniels'],
+              RB: ['Brian Robinson Jr.', 'Austin Ekeler'],
+              WR: ['Terry McLaurin', 'Dyami Brown', 'Olamide Zaccheaus'],
+              TE: ['Zach Ertz', 'Ben Sinnott'],
+              K: ['Zane Gonzalez'],
+              DEF: ['Bobby Wagner', 'Frankie Luvu'],
+              DST: ['Commanders Defense']
+            }},
+            'LAR': { name: 'LA Rams', players: {
+              QB: ['Matthew Stafford'],
+              RB: ['Kyren Williams', 'Blake Corum'],
+              WR: ['Puka Nacua', 'Cooper Kupp', 'Demarcus Robinson'],
+              TE: ['Tyler Higbee', 'Colby Parkinson'],
+              K: ['Joshua Karty'],
+              DEF: ['Jared Verse', 'Kobie Turner'],
+              DST: ['Rams Defense']
+            }},
+            'MIN': { name: 'Minnesota Vikings', players: {
+              QB: ['Sam Darnold'],
+              RB: ['Aaron Jones', 'Ty Chandler'],
+              WR: ['Justin Jefferson', 'Jordan Addison', 'Jalen Nailor'],
+              TE: ['T.J. Hockenson', 'Josh Oliver'],
+              K: ['Will Reichard'],
+              DEF: ['Jonathan Greenard', 'Harrison Smith'],
+              DST: ['Vikings Defense']
+            }},
+            'GB': { name: 'Green Bay Packers', players: {
+              QB: ['Jordan Love'],
+              RB: ['Josh Jacobs', 'Emanuel Wilson'],
+              WR: ['Jayden Reed', 'Romeo Doubs', 'Dontayvion Wicks'],
+              TE: ['Tucker Kraft', 'Luke Musgrave'],
+              K: ['Brandon McManus'],
+              DEF: ['Rashan Gary', 'Xavier McKinney'],
+              DST: ['Packers Defense']
+            }}
+          };
 
-    const usedTeams = getUsedTeams();
-    if (usedTeams.size !== 14) {
-      alert('Error: You must select exactly one player from each of the 14 playoff teams!');
-      return;
-    }
+          const positions = [
+            { key: 'QB', name: 'Quarterback', count: 3, type: 'QB' },
+            { key: 'RB', name: 'Running Back', count: 3, type: 'RB' },
+            { key: 'WR', name: 'Wide Receiver', count: 3, type: 'WR' },
+            { key: 'TE', name: 'Tight End', count: 1, type: 'TE' },
+            { key: 'FLEX', name: 'Flex (RB/WR/TE)', count: 1, type: 'FLEX' },
+            { key: 'K', name: 'Kicker', count: 1, type: 'K' },
+            { key: 'DEF', name: 'Defensive Player', count: 1, type: 'DEF' },
+            { key: 'DST', name: 'Team Defense', count: 1, type: 'DST' }
+          ];
 
-    setSendingEmail(true);
+          const [roster, setRoster] = useState({});
+          const [submitted, setSubmitted] = useState(false);
+          const [submittedRoster, setSubmittedRoster] = useState(null);
+          const [participantEmail, setParticipantEmail] = useState('');
+          const [participantName, setParticipantName] = useState('');
+          const [sendingEmail, setSendingEmail] = useState(false);
+          const [additionalNotes, setAdditionalNotes] = useState('');
 
-    // Format the submission data
-    let formattedRoster = '';
-    if (participantName.trim()) {
-      formattedRoster += `PARTICIPANT: ${participantName}\n\n`;
-    }
-    
-    positions.forEach(pos => {
-      formattedRoster += `${pos.name}${pos.count > 1 ? 's' : ''}:\n`;
-      Array.from({ length: pos.count }, (_, i) => {
-        const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
-        const player = roster[slot];
-        const team = getTeamFromPlayer(player);
-        formattedRoster += `  • ${player} (${playoffTeams[team]?.name})\n`;
-      });
-      formattedRoster += '\n';
-    });
-    
-    if (additionalNotes.trim()) {
-      formattedRoster += `ADDITIONAL NOTES:\n${additionalNotes}\n\n`;
-    }
+          const getTeamFromPlayer = (playerName) => {
+            for (const [teamCode, teamData] of Object.entries(playoffTeams)) {
+              for (const players of Object.values(teamData.players)) {
+                if (players.includes(playerName)) {
+                  return teamCode;
+                }
+              }
+            }
+            return null;
+          };
 
-    try {
-      const response = await fetch('https://formspree.io/f/mrezwqqk', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          participantName: participantName || 'Anonymous',
-          participantEmail: participantEmail || 'Not provided',
-          roster: formattedRoster,
-          _subject: `Fantasy Playoff Pool Submission - ${participantName || 'Anonymous'}`
-        })
-      });
+          const getUsedTeams = () => {
+            const teams = new Set();
+            Object.values(roster).forEach(player => {
+              if (player) {
+                const team = getTeamFromPlayer(player);
+                if (team) teams.add(team);
+              }
+            });
+            return teams;
+          };
 
-      if (response.ok) {
-        const submissionData = { ...roster, participantEmail, participantName, additionalNotes };
-        setSubmittedRoster(submissionData);
-        setSubmitted(true);
-      } else {
-        alert('There was an error submitting your roster. Please try again or contact the organizer.');
-      }
-    } catch (error) {
-      alert('There was an error submitting your roster. Please try again or contact the organizer.');
-      console.error('Submission error:', error);
-    } finally {
-      setSendingEmail(false);
-    }
-  };
-
-  const handleReset = () => {
-    setSubmitted(false);
-    setSubmittedRoster(null);
-    setRoster({});
-    setParticipantEmail('');
-    setParticipantName('');
-    setSendingEmail(false);
-    setAdditionalNotes('');
-  };
-
-  if (submitted && submittedRoster) {
-    return (
-      <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #662B00 0%, #993F00 50%, #CC5500 100%)', fontFamily: 'Inter, sans-serif' }}>
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl p-8">
-          <div className="text-center mb-8">
-            <CheckCircle className="w-16 h-16 mx-auto mb-4" style={{ color: '#34D399' }} />
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Submission Successful!</h1>
-            <p style={{ color: '#8B95A5' }}>Your roster has been recorded. Good luck!</p>
-          </div>
-
-          <div className="rounded-lg p-6 mb-6" style={{ backgroundColor: '#F5F5F5' }}>
-            <h2 className="text-xl font-bold mb-4" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Your Roster</h2>
+          const getAvailablePlayers = (positionType, currentSlot) => {
+            const usedTeams = getUsedTeams();
+            const currentPlayer = roster[currentSlot];
+            const currentTeam = currentPlayer ? getTeamFromPlayer(currentPlayer) : null;
             
-            {submittedRoster.participantName && submittedRoster.participantName.trim() && (
-              <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #E6E9ED' }}>
-                <h3 className="font-semibold mb-2" style={{ color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>Participant:</h3>
-                <div className="ml-4" style={{ color: '#8B95A5' }}>
-                  {submittedRoster.participantName}
+            let allPlayers = [];
+            
+            if (positionType === 'FLEX') {
+              Object.entries(playoffTeams).forEach(([teamCode, teamData]) => {
+                ['RB', 'WR', 'TE'].forEach(pos => {
+                  teamData.players[pos]?.forEach(player => {
+                    allPlayers.push({ player, team: teamCode, teamName: teamData.name });
+                  });
+                });
+              });
+            } else {
+              Object.entries(playoffTeams).forEach(([teamCode, teamData]) => {
+                teamData.players[positionType]?.forEach(player => {
+                  allPlayers.push({ player, team: teamCode, teamName: teamData.name });
+                });
+              });
+            }
+            
+            return allPlayers.map(({ player, team, teamName }) => ({
+              player,
+              team,
+              teamName,
+              disabled: usedTeams.has(team) && team !== currentTeam
+            }));
+          };
+
+          const handlePlayerSelect = (slot, player) => {
+            setRoster(prev => ({ ...prev, [slot]: player }));
+          };
+
+          const isFormComplete = () => {
+            let requiredSlots = 0;
+            positions.forEach(pos => {
+              for (let i = 1; i <= pos.count; i++) {
+                requiredSlots++;
+              }
+            });
+            
+            const filledSlots = Object.values(roster).filter(v => v).length;
+            return filledSlots === requiredSlots;
+          };
+
+          const handleSubmit = async () => {
+            if (!isFormComplete()) {
+              alert('Please complete all roster selections!');
+              return;
+            }
+
+            const usedTeams = getUsedTeams();
+            if (usedTeams.size !== 14) {
+              alert('Error: You must select exactly one player from each of the 14 playoff teams!');
+              return;
+            }
+
+            setSendingEmail(true);
+
+            // Format the submission data
+            let formattedRoster = '';
+            if (participantName.trim()) {
+              formattedRoster += `PARTICIPANT: ${participantName}\n\n`;
+            }
+            
+            positions.forEach(pos => {
+              formattedRoster += `${pos.name}${pos.count > 1 ? 's' : ''}:\n`;
+              Array.from({ length: pos.count }, (_, i) => {
+                const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                const player = roster[slot];
+                const team = getTeamFromPlayer(player);
+                formattedRoster += `  • ${player} (${playoffTeams[team]?.name})\n`;
+              });
+              formattedRoster += '\n';
+            });
+            
+            if (additionalNotes.trim()) {
+              formattedRoster += `ADDITIONAL NOTES:\n${additionalNotes}\n\n`;
+            }
+
+            try {
+              const response = await fetch('https://formspree.io/f/mrezwqqk', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  participantName: participantName || 'Anonymous',
+                  participantEmail: participantEmail || 'Not provided',
+                  roster: formattedRoster,
+                  _subject: `Fantasy Playoff Pool Submission - ${participantName || 'Anonymous'}`
+                })
+              });
+
+              if (response.ok) {
+                const submissionData = { ...roster, participantEmail, participantName, additionalNotes };
+                setSubmittedRoster(submissionData);
+                setSubmitted(true);
+              } else {
+                alert('There was an error submitting your roster. Please try again or contact the organizer.');
+              }
+            } catch (error) {
+              alert('There was an error submitting your roster. Please try again or contact the organizer.');
+              console.error('Submission error:', error);
+            } finally {
+              setSendingEmail(false);
+            }
+          };
+
+          const handleReset = () => {
+            setSubmitted(false);
+            setSubmittedRoster(null);
+            setRoster({});
+            setParticipantEmail('');
+            setParticipantName('');
+            setSendingEmail(false);
+            setAdditionalNotes('');
+          };
+
+          if (submitted && submittedRoster) {
+            return (
+              <div style={{ minHeight: '100vh', padding: '24px', background: 'linear-gradient(135deg, #662B00 0%, #993F00 50%, #CC5500 100%)', fontFamily: 'Inter, sans-serif' }}>
+                <div style={{ maxWidth: '896px', margin: '0 auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', padding: '32px' }}>
+                  <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                    <CheckCircle style={{ width: '64px', height: '64px', margin: '0 auto 16px', color: '#34D399' }} />
+                    <h1 style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Submission Successful!</h1>
+                    <p style={{ color: '#8B95A5' }}>Your roster has been recorded. Good luck!</p>
+                  </div>
+
+                  <div style={{ borderRadius: '8px', padding: '24px', marginBottom: '24px', backgroundColor: '#F5F5F5' }}>
+                    <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Your Roster</h2>
+                    
+                    {submittedRoster.participantName && submittedRoster.participantName.trim() && (
+                      <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #E6E9ED' }}>
+                        <h3 style={{ fontWeight: '600', marginBottom: '8px', color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>Participant:</h3>
+                        <div style={{ marginLeft: '16px', color: '#8B95A5' }}>
+                          {submittedRoster.participantName}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {positions.map(pos => (
+                      <div key={pos.key} style={{ marginBottom: '16px' }}>
+                        <h3 style={{ fontWeight: '600', marginBottom: '8px', color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>{pos.name}s:</h3>
+                        <div style={{ marginLeft: '16px' }}>
+                          {Array.from({ length: pos.count }, (_, i) => {
+                            const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                            const player = submittedRoster[slot];
+                            const team = getTeamFromPlayer(player);
+                            return (
+                              <div key={slot} style={{ marginBottom: '4px', color: '#8B95A5' }}>
+                                {player} ({playoffTeams[team]?.name})
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+
+                    {submittedRoster.additionalNotes && submittedRoster.additionalNotes.trim() && (
+                      <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #E6E9ED' }}>
+                        <h3 style={{ fontWeight: '600', marginBottom: '8px', color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>Additional Notes:</h3>
+                        <div style={{ marginLeft: '16px', color: '#8B95A5', whiteSpace: 'pre-wrap' }}>
+                          {submittedRoster.additionalNotes}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ textAlign: 'center', fontSize: '14px', marginBottom: '16px', color: '#8B95A5' }}>
+                    <p>Save or screenshot this page for your records.</p>
+                    <p style={{ marginTop: '8px' }}>Your submission has been sent to the organizer.</p>
+                  </div>
+
+                  <button
+                    onClick={handleReset}
+                    style={{ width: '100%', fontWeight: '600', padding: '12px', borderRadius: '8px', transition: 'background-color 0.2s', color: 'white', backgroundColor: '#CC5500', border: 'none', cursor: 'pointer', fontFamily: 'Poppins, sans-serif' }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#993F00'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#CC5500'}
+                  >
+                    Submit Another Entry
+                  </button>
+                </div>
+              </div>
+            );
+          }
+
+          const usedTeams = getUsedTeams();
+
+          return (
+            <div style={{ minHeight: '100vh', padding: '24px', background: 'linear-gradient(135deg, #662B00 0%, #993F00 50%, #CC5500 100%)', fontFamily: 'Inter, sans-serif' }}>
+              <div style={{ maxWidth: '896px', margin: '0 auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', padding: '32px' }}>
+                <h1 style={{ fontSize: '36px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                  Fantasy Football Playoff Pool
+                </h1>
+                <p style={{ textAlign: 'center', marginBottom: '32px', color: '#8B95A5' }}>Select ONE player from each playoff team</p>
+
+                <div style={{ borderRadius: '8px', padding: '16px', marginBottom: '24px', backgroundColor: '#DBE3EB', borderColor: '#5B7C99', borderWidth: '1px', borderStyle: 'solid' }}>
+                  <h3 style={{ fontWeight: '600', marginBottom: '8px', color: '#2D3E4D', fontFamily: 'Poppins, sans-serif' }}>Rules:</h3>
+                  <ul style={{ fontSize: '14px', marginLeft: '16px', color: '#445D73' }}>
+                    <li style={{ marginBottom: '4px' }}>Select 1 player from each of the 14 playoff teams</li>
+                    <li style={{ marginBottom: '4px' }}>All players start each week and accrue points</li>
+                    <li style={{ marginBottom: '4px' }}>Tiebreaker: Total points in Super Bowl, then conference championships</li>
+                  </ul>
+                  
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #8FA5B8' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#2D3E4D', fontFamily: 'Poppins, sans-serif' }}>If you want a player who isn't listed:</p>
+                    <ol style={{ fontSize: '14px', marginLeft: '16px', color: '#445D73' }}>
+                      <li style={{ marginBottom: '4px' }}>Select a teammate at the same position from the list.</li>
+                      <li style={{ marginBottom: '4px' }}>Write the unlisted player's name at the end of your submission.</li>
+                    </ol>
+                    <p style={{ fontSize: '14px', marginTop: '8px', fontStyle: 'italic', color: '#445D73' }}>
+                      <strong>Example:</strong> To select David Montgomery, choose Jahmyr Gibbs from the RB question and write in "David Montgomery" at the end of the form.
+                    </p>
+                  </div>
+                  
+                  <div style={{ marginTop: '16px', padding: '12px', borderRadius: '4px', backgroundColor: '#FEF3D1' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>⚠️ The Nando Disclaimer:</p>
+                    <p style={{ fontSize: '14px', marginTop: '4px', color: '#BD9F3A' }}>
+                      Failure to complete the form correctly and/or in a timely manner may result in one or more of your player selections being voided, or replaced with Leonard Fournette, at the discretion of the commish. Please request a gentle confirmation if you have concerns about an invalid entry.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '24px', borderRadius: '8px', padding: '16px', backgroundColor: '#FFFFFF', borderColor: '#CCCCCC', borderWidth: '1px', borderStyle: 'solid' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    value={participantName}
+                    onChange={(e) => setParticipantName(e.target.value)}
+                    placeholder="Enter your name"
+                    style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '24px', borderRadius: '8px', padding: '16px', backgroundColor: '#F5F5F5' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: '600', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Teams Used:</span>
+                    <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>{usedTeams.size} / 14</span>
+                  </div>
+                  {usedTeams.size > 0 && (
+                    <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {Array.from(usedTeams).map(team => (
+                        <span key={team} style={{ padding: '4px 12px', borderRadius: '9999px', fontSize: '14px', backgroundColor: '#CFF4E5', color: '#1A6A4D' }}>
+                          {playoffTeams[team]?.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {positions.map(pos => (
+                  <div key={pos.key} style={{ marginBottom: '32px' }}>
+                    <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                      {pos.name}{pos.count > 1 ? 's' : ''} ({pos.count})
+                    </h2>
+                    
+                    {Array.from({ length: pos.count }, (_, i) => {
+                      const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
+                      const availablePlayers = getAvailablePlayers(pos.type, slot);
+                      const selectedPlayer = roster[slot];
+                      const selectedTeam = selectedPlayer ? getTeamFromPlayer(selectedPlayer) : null;
+                      
+                      return (
+                        <div key={slot} style={{ marginBottom: '16px' }}>
+                          <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                            {pos.name} {pos.count > 1 ? `#${i + 1}` : ''}
+                          </label>
+                          <select
+                            value={selectedPlayer || ''}
+                            onChange={(e) => handlePlayerSelect(slot, e.target.value)}
+                            style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px' }}
+                          >
+                            <option value="">-- Select {pos.name} --</option>
+                            {availablePlayers.map(({ player, team, teamName, disabled }) => (
+                              <option key={player} value={player} disabled={disabled}>
+                                {player} ({teamName}) {disabled ? '- TEAM USED' : ''}
+                              </option>
+                            ))}
+                          </select>
+                          {selectedTeam && (
+                            <p style={{ fontSize: '14px', marginTop: '4px', color: '#34D399' }}>
+                              ✓ {playoffTeams[selectedTeam]?.name}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+
+                <div style={{ marginBottom: '32px', borderRadius: '8px', padding: '16px', backgroundColor: '#DED1F2', borderColor: '#6B46C1', borderWidth: '1px', borderStyle: 'solid' }
+                  }>
+<h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Email Confirmation (Optional)</h2>
+<label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+Your Email Address
+</label>
+<input
+type="email"
+value={participantEmail}
+onChange={(e) => setParticipantEmail(e.target.value)}
+placeholder="your.email@example.com (optional)"
+style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px' }}
+/>
+<p style={{ fontSize: '14px', marginTop: '8px', color: '#503591' }}>
+Enter your email to receive a copy of your roster submission
+</p>
+</div>
+            <div style={{ marginBottom: '32px', borderRadius: '8px', padding: '16px', backgroundColor: '#F5F5F5', borderColor: '#CCCCCC', borderWidth: '1px', borderStyle: 'solid' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Additional Notes (Optional)</h2>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
+                Player Substitutions or Special Requests
+              </label>
+              <textarea
+                value={additionalNotes}
+                onChange={(e) => setAdditionalNotes(e.target.value)}
+                placeholder='Example: "Replace Jahmyr Gibbs with David Montgomery"'
+                rows="4"
+                style={{ width: '100%', padding: '12px', border: '1px solid #CCCCCC', borderRadius: '8px', resize: 'vertical' }}
+              />
+              <p style={{ fontSize: '14px', marginTop: '8px', color: '#8B95A5' }}>
+                Use this field to request unlisted players or note any substitutions
+              </p>
+            </div>
+
+            {usedTeams.size !== 14 && usedTeams.size > 0 && (
+              <div style={{ marginBottom: '16px', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#FEF3D1', borderColor: '#FCD34D', borderWidth: '1px', borderStyle: 'solid' }}>
+                <AlertCircle style={{ width: '20px', height: '20px', flexShrink: 0, marginTop: '2px', color: '#7E6A27' }} />
+                <div>
+                  <p style={{ fontWeight: '600', color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>Warning: Team Requirement Not Met</p>
+                  <p style={{ fontSize: '14px', color: '#BD9F3A' }}>
+                    You must select exactly one player from each of the 14 playoff teams. 
+                    Currently using {usedTeams.size} teams.
+                  </p>
                 </div>
               </div>
             )}
-            
-            {positions.map(pos => (
-              <div key={pos.key} className="mb-4">
-                <h3 className="font-semibold mb-2" style={{ color: '#5B7C99', fontFamily: 'Poppins, sans-serif' }}>{pos.name}s:</h3>
-                <div className="ml-4">
-                  {Array.from({ length: pos.count }, (_, i) => {
-                    const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
-                    const player = submittedRoster[slot];
-                    const team = getTeamFromPlayer(player);
-                    return (
-                      <div key={slot} className="mb-1" style={{ color: '#8B95A5' }}>
-                        {player} ({playoffTeams[team]?.name})
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="text-center text-sm mb-4" style={{ color: '#8B95A5' }}>
-            <p>Save or screenshot this page for your records.</p>
-            <p className="mt-2">Your submission has been sent to the organizer.</p>
-          </div>
-
-          <button
-            onClick={handleReset}
-            className="w-full font-semibold py-3 rounded-lg transition text-white"
-            style={{ backgroundColor: '#CC5500', fontFamily: 'Poppins, sans-serif' }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#993F00'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#CC5500'}
-          >
-            Submit Another Entry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const usedTeams = getUsedTeams();
-
-  return (
-    <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #662B00 0%, #993F00 50%, #CC5500 100%)', fontFamily: 'Inter, sans-serif' }}>
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl p-8">
-        <h1 className="text-4xl font-bold text-center mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-          Fantasy Football Playoff Pool
-        </h1>
-        <p className="text-center mb-8" style={{ color: '#8B95A5' }}>Select ONE player from each playoff team</p>
-
-        <div className="rounded-lg p-4 mb-6" style={{ backgroundColor: '#DBE3EB', borderColor: '#5B7C99', borderWidth: '1px' }}>
-          <h3 className="font-semibold mb-2" style={{ color: '#2D3E4D', fontFamily: 'Poppins, sans-serif' }}>Rules:</h3>
-          <ul className="text-sm space-y-1 ml-4" style={{ color: '#445D73' }}>
-            <li>• Select 1 player from each of the 14 playoff teams</li>
-            <li>• All players start each week and accrue points</li>
-            <li>• Tiebreaker: Total points in Super Bowl, then conference championships</li>
-          </ul>
-          
-          <div className="mt-4 pt-4" style={{ borderTop: '1px solid #8FA5B8' }}>
-            <p className="text-sm font-semibold mb-2" style={{ color: '#2D3E4D', fontFamily: 'Poppins, sans-serif' }}>If you want a player who isn't listed:</p>
-            <ol className="text-sm space-y-1 ml-4" style={{ color: '#445D73' }}>
-              <li>1. Select a teammate at the same position from the list.</li>
-              <li>2. Write the unlisted player's name at the end of your submission.</li>
-            </ol>
-            <p className="text-sm mt-2 italic" style={{ color: '#445D73' }}>
-              <strong>Example:</strong> To select David Montgomery, choose Jahmyr Gibbs from the RB question and write in "David Montgomery" at the end of the form.
-            </p>
-          </div>
-          
-          <div className="mt-4 p-3 rounded" style={{ backgroundColor: '#FEF3D1' }}>
-            <p className="text-sm font-semibold" style={{ color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>⚠️ The Nando Disclaimer:</p>
-            <p className="text-sm mt-1" style={{ color: '#BD9F3A' }}>
-              Failure to complete the form correctly and/or in a timely manner may result in one or more of your player selections being voided, or replaced with Leonard Fournette, at the discretion of the commish. Please request a gentle confirmation if you have concerns about an invalid entry.
-            </p>
+            <button
+              onClick={handleSubmit}
+              disabled={!isFormComplete() || sendingEmail}
+              style={{ 
+                width: '100%', 
+                padding: '16px', 
+                borderRadius: '8px', 
+                fontWeight: 'bold', 
+                fontSize: '18px', 
+                transition: 'background-color 0.2s', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '8px',
+                backgroundColor: isFormComplete() && !sendingEmail ? '#CC5500' : '#CCCCCC',
+                color: isFormComplete() && !sendingEmail ? '#FFFFFF' : '#8B95A5',
+                border: 'none',
+                cursor: isFormComplete() && !sendingEmail ? 'pointer' : 'not-allowed',
+                fontFamily: 'Poppins, sans-serif'
+              }}
+              onMouseOver={(e) => {
+                if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#993F00';
+              }}
+              onMouseOut={(e) => {
+                if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#CC5500';
+              }}
+            >
+              <Send style={{ width: '20px', height: '20px' }} />
+              {sendingEmail ? 'Submitting...' : 'Submit Roster'}
+            </button>
           </div>
         </div>
+      );
+    };
 
-        <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: '#FFFFFF', borderColor: '#CCCCCC', borderWidth: '1px', borderStyle: 'solid' }}>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-            Your Name
-          </label>
-          <input
-            type="text"
-            value={participantName}
-            onChange={(e) => setParticipantName(e.target.value)}
-            placeholder="Enter your name"
-            className="w-full p-3 border rounded-lg"
-            style={{ borderColor: '#CCCCCC' }}
-          />
-        </div>
-
-        <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: '#F5F5F5' }}>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Teams Used:</span>
-            <span className="text-2xl font-bold" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>{usedTeams.size} / 14</span>
-          </div>
-          {usedTeams.size > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {Array.from(usedTeams).map(team => (
-                <span key={team} className="px-3 py-1 rounded-full text-sm" style={{ backgroundColor: '#CFF4E5', color: '#1A6A4D' }}>
-                  {playoffTeams[team]?.name}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {positions.map(pos => (
-          <div key={pos.key} className="mb-8">
-            <h2 className="text-xl font-bold mb-4" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-              {pos.name}{pos.count > 1 ? 's' : ''} ({pos.count})
-            </h2>
-            
-            {Array.from({ length: pos.count }, (_, i) => {
-              const slot = `${pos.key}${pos.count > 1 ? i + 1 : ''}`;
-              const availablePlayers = getAvailablePlayers(pos.type, slot);
-              const selectedPlayer = roster[slot];
-              const selectedTeam = selectedPlayer ? getTeamFromPlayer(selectedPlayer) : null;
-              
-              return (
-                <div key={slot} className="mb-4">
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-                    {pos.name} {pos.count > 1 ? `#${i + 1}` : ''}
-                  </label>
-                  <select
-                    value={selectedPlayer || ''}
-                    onChange={(e) => handlePlayerSelect(slot, e.target.value)}
-                    className="w-full p-3 border rounded-lg"
-                    style={{ borderColor: '#CCCCCC' }}
-                  >
-                    <option value="">-- Select {pos.name} --</option>
-                    {availablePlayers.map(({ player, team, teamName, disabled }) => (
-                      <option key={player} value={player} disabled={disabled}>
-                        {player} ({teamName}) {disabled ? '- TEAM USED' : ''}
-                      </option>
-                    ))}
-                  </select>
-                  {selectedTeam && (
-                    <p className="text-sm mt-1" style={{ color: '#34D399' }}>
-                      ✓ {playoffTeams[selectedTeam]?.name}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-
-        <div className="mb-8 rounded-lg p-4" style={{ backgroundColor: '#DED1F2', borderColor: '#6B46C1', borderWidth: '1px' }}>
-          <h2 className="text-xl font-bold mb-4" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Email Confirmation (Optional)</h2>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-            Your Email Address
-          </label>
-          <input
-            type="email"
-            value={participantEmail}
-            onChange={(e) => setParticipantEmail(e.target.value)}
-            placeholder="your.email@example.com (optional)"
-            className="w-full p-3 border rounded-lg"
-            style={{ borderColor: '#CCCCCC' }}
-          />
-          <p className="text-sm mt-2" style={{ color: '#503591' }}>
-            Enter your email to receive a copy of your roster submission
-          </p>
-        </div>
-
-        <div className="mb-8 rounded-lg p-4" style={{ backgroundColor: '#F5F5F5', borderColor: '#CCCCCC', borderWidth: '1px' }}>
-          <h2 className="text-xl font-bold mb-4" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>Additional Notes (Optional)</h2>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#333333', fontFamily: 'Poppins, sans-serif' }}>
-            Player Substitutions or Special Requests
-          </label>
-          <textarea
-            value={additionalNotes}
-            onChange={(e) => setAdditionalNotes(e.target.value)}
-            placeholder='Example: "Replace Jahmyr Gibbs with David Montgomery"'
-            rows="4"
-            className="w-full p-3 border rounded-lg"
-            style={{ borderColor: '#CCCCCC', resize: 'vertical' }}
-          />
-          <p className="text-sm mt-2" style={{ color: '#8B95A5' }}>
-            Use this field to request unlisted players or note any substitutions
-          </p>
-        </div>
-
-        {usedTeams.size !== 14 && usedTeams.size > 0 && (
-          <div className="mb-4 rounded-lg p-4 flex items-start gap-3" style={{ backgroundColor: '#FEF3D1', borderColor: '#FCD34D', borderWidth: '1px' }}>
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#7E6A27' }} />
-            <div>
-              <p className="font-semibold" style={{ color: '#7E6A27', fontFamily: 'Poppins, sans-serif' }}>Warning: Team Requirement Not Met</p>
-              <p className="text-sm" style={{ color: '#BD9F3A' }}>
-                You must select exactly one player from each of the 14 playoff teams. 
-                Currently using {usedTeams.size} teams.
-              </p>
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={handleSubmit}
-          disabled={!isFormComplete() || sendingEmail}
-          className={`w-full py-4 rounded-lg font-bold text-lg transition flex items-center justify-center gap-2 ${
-            isFormComplete() && !sendingEmail
-              ? 'text-white cursor-pointer'
-              : 'cursor-not-allowed'
-          }`}
-          style={{ 
-            backgroundColor: isFormComplete() && !sendingEmail ? '#CC5500' : '#CCCCCC',
-            color: isFormComplete() && !sendingEmail ? '#FFFFFF' : '#8B95A5',
-            fontFamily: 'Poppins, sans-serif'
-          }}
-          onMouseOver={(e) => {
-            if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#993F00';
-          }}
-          onMouseOut={(e) => {
-            if (isFormComplete() && !sendingEmail) e.target.style.backgroundColor = '#CC5500';
-          }}
-        >
-          <Send className="w-5 h-5" />
-          {sendingEmail ? 'Submitting...' : 'Submit Roster'}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default FantasyPlayoffPool;
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<FantasyPlayoffPool />);
+</script>
+</body>
+</html>
